@@ -1,15 +1,17 @@
 /* --- Variables and General Reset --- */
 :root {
-    --color-primary: #3b82f6; /* Blue */
-    --color-primary-dark: #2563eb;
-    --color-success: #10b981; /* Green */
-    --color-fail: #ef4444; /* Red */
-    --color-background: #f9fafb;
-    --color-surface: #ffffff;
-    --color-text-dark: #1f2937;
-    --color-text-light: #6b7280;
-    --border-radius: 8px;
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --color-primary: #007aff;      /* iOS Blue for strong actions */
+    --color-primary-dark: #005bb5;
+    --color-success: #34c759;      /* Green for 'Known' */
+    --color-fail: #ff3b30;         /* Red for 'Unknown' */
+    --color-background: #f8f8f8;   /* Very light gray background */
+    --color-surface: #ffffff;      /* Pure white cards/forms */
+    --color-text-dark: #1c1c1e;    /* Very dark gray for headings/text */
+    --color-text-light: #8e8e93;   /* Muted gray for secondary text */
+    --color-border: #e2e2e4;       /* Subtle border color */
+    --border-radius: 12px;         /* Rounded corners for a modern feel */
+    --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-floating: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -19,29 +21,30 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: var(--color-background);
     color: var(--color-text-dark);
-    line-height: 1.6;
+    line-height: 1.5;
+    min-height: 100vh; /* Ensures full background coverage */
 }
 
-/* --- Layout --- */
+/* --- Layout and Header --- */
 
 header {
     background-color: var(--color-surface);
     padding: 1rem 0;
-    box-shadow: var(--shadow-md);
-    border-bottom: 1px solid #e5e7eb;
+    box-shadow: var(--shadow-subtle);
+    border-bottom: 1px solid var(--color-border);
     display: flex;
     align-items: center;
-    justify-content: space-between;
 }
 
 header h1 {
     font-size: 1.8rem;
-    color: var(--color-primary-dark);
+    color: var(--color-text-dark);
     flex-grow: 1;
     text-align: center;
+    font-weight: 700;
 }
 
 .back-link {
@@ -49,32 +52,34 @@ header h1 {
     color: var(--color-text-light);
     padding: 0 1rem;
     font-size: 1rem;
-    transition: color 0.2s;
-}
-
-.back-link:hover {
-    color: var(--color-primary);
 }
 
 .container {
-    max-width: 960px;
+    max-width: 900px;
     margin: 2rem auto;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--color-text-dark);
 }
 
 /* --- Buttons and Forms --- */
 
 .primary-btn, .secondary-btn, .success-btn, .fail-btn {
-    padding: 10px 15px;
+    padding: 14px 24px;
     border-radius: var(--border-radius);
     font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
     border: none;
-    text-decoration: none; /* For link buttons */
+    text-decoration: none;
     display: inline-block;
     text-align: center;
-    transition: background-color 0.2s, box-shadow 0.2s;
-    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
 }
 
 .primary-btn {
@@ -84,15 +89,16 @@ header h1 {
 
 .primary-btn:hover {
     background-color: var(--color-primary-dark);
+    box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);
 }
 
 .secondary-btn {
-    background-color: #e5e7eb;
+    background-color: #f3f3f4;
     color: var(--color-text-dark);
 }
 
 .secondary-btn:hover {
-    background-color: #d1d5db;
+    background-color: #e5e5e6;
 }
 
 .success-btn {
@@ -100,24 +106,16 @@ header h1 {
     color: var(--color-surface);
 }
 
-.success-btn:hover {
-    background-color: #059669;
-}
-
 .fail-btn {
     background-color: var(--color-fail);
     color: var(--color-surface);
 }
 
-.fail-btn:hover {
-    background-color: #dc2626;
-}
-
 .card-form {
     background-color: var(--color-surface);
-    padding: 1.5rem;
+    padding: 2rem;
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-subtle);
     margin-bottom: 2rem;
     display: grid;
     gap: 1rem;
@@ -125,22 +123,33 @@ header h1 {
 
 .card-form input, .card-form textarea {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
     font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* --- Deck List --- */
+.card-form input:focus, .card-form textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    outline: none;
+}
+
+/* --- Deck List (Homepage) --- */
 
 #create-deck-btn {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     width: 100%;
+    max-width: 350px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .deck-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5rem;
 }
 
@@ -148,45 +157,29 @@ header h1 {
     background-color: var(--color-surface);
     padding: 1.5rem;
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-subtle);
+    border: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
 }
 
 .deck-card h3 {
     margin-bottom: 0.5rem;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: var(--color-primary-dark);
+    font-weight: 600;
 }
 
 .deck-card p {
     color: var(--color-text-light);
     margin-bottom: 1rem;
-}
-
-.deck-progress {
-    margin-top: auto;
-    margin-bottom: 1rem;
-}
-
-.progress-bar-small {
-    height: 8px;
-    background-color: #e5e7eb;
-    border-radius: 4px;
-    margin-bottom: 0.25rem;
-}
-
-.progress-bar-small div {
-    height: 100%;
-    background-color: var(--color-success);
-    border-radius: 4px;
-    transition: width 0.3s;
+    font-size: 0.95rem;
 }
 
 .deck-card .card-actions {
     display: flex;
     gap: 0.5rem;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
 }
 
 .deck-card .card-actions a, .deck-card .card-actions button {
@@ -196,92 +189,72 @@ header h1 {
 }
 
 .delete-deck-btn {
-    background-color: #fca5a5;
+    background-color: #e5e5e6;
     color: var(--color-text-dark);
+}
+.delete-deck-btn:hover {
+    background-color: #d1d5db;
 }
 
 /* --- Card Editor List --- */
-.card-list-section {
-    margin-top: 2rem;
-}
-
 .card-item {
     background-color: var(--color-surface);
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
     padding: 1rem;
     margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: var(--shadow-subtle);
 }
 
-.card-item .card-preview p {
-    margin: 0.25rem 0;
-    color: var(--color-text-dark);
+.card-item .card-preview p strong {
+    color: var(--color-primary);
 }
 
-.card-item .card-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.card-item button {
-    padding: 5px 10px;
-    font-size: 0.85rem;
-    border-radius: 4px;
+.card-item .card-actions button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 6px;
 }
 
 /* --- Study View --- */
 
 .study-main {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
 .mode-selector {
     display: flex;
-    flex-direction: column;
     gap: 1rem;
     width: 100%;
-    max-width: 400px;
-    text-align: center;
+    max-width: 500px;
     margin-top: 2rem;
 }
-
 .mode-selector button {
-    width: 100%;
+    flex: 1;
 }
 
-.study-section {
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-    padding: 1rem;
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* Flashcard Styles */
+/* Flashcard Styles (Optimized 3D Flip) */
 .flashcard-scene {
     width: 100%;
-    height: 300px;
-    perspective: 1000px;
-    margin: 1.5rem 0;
+    max-width: 500px;
+    height: 350px; /* Increased size for focus */
+    perspective: 1000px; 
+    margin: 2rem 0;
 }
 
 .flashcard {
     position: relative;
     width: 100%;
     height: 100%;
-    text-align: center;
-    transition: transform 0.6s;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1.2); /* Smooth, classic flip */
     transform-style: preserve-3d;
     cursor: pointer;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-floating);
     border-radius: var(--border-radius);
 }
 
@@ -293,50 +266,57 @@ header h1 {
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
+    backface-visibility: hidden; 
     background-color: var(--color-surface);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
+    padding: 2.5rem;
     border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.flashcard-front p, .flashcard-back p {
+    font-size: 1.8rem; /* Larger text for readability */
+    font-weight: 500;
 }
 
 .flashcard-back {
     transform: rotateY(180deg);
-}
-
-.flashcard-front p, .flashcard-back p {
-    font-size: 1.5rem;
-    font-weight: 600;
+    background-color: #f7faff; /* Light blue tint for answer side */
+    color: var(--color-primary-dark);
 }
 
 .flip-hint {
     position: absolute;
-    bottom: 10px;
-    font-size: 0.8rem;
+    bottom: 15px;
+    font-size: 0.85rem;
     color: var(--color-text-light);
+    font-weight: 400;
 }
 
 .study-actions {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: center;
     margin-top: 1.5rem;
+    width: 100%;
+    max-width: 500px;
 }
 
 .study-actions button {
+    flex: 1;
     font-size: 1.1rem;
-    padding: 12px 25px;
-    flex-grow: 1;
-    max-width: 150px;
+    padding: 14px 20px;
 }
 
+/* Progress Bar */
 .progress-bar {
     width: 100%;
+    max-width: 500px;
     height: 10px;
-    background-color: #e5e7eb;
+    background-color: var(--color-border);
     border-radius: 5px;
     margin-bottom: 0.5rem;
 }
@@ -344,108 +324,44 @@ header h1 {
 #progress-indicator {
     height: 100%;
     width: 0%;
-    background-color: var(--color-primary);
+    background-color: var(--color-success);
     border-radius: 5px;
-    transition: width 0.3s;
 }
 
-.card-counter {
-    color: var(--color-text-light);
-    margin-bottom: 1rem;
-}
-
-.session-summary {
-    background-color: var(--color-surface);
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
-    margin-top: 2rem;
-}
-
-.summary-known {
-    color: var(--color-success);
-    font-weight: bold;
-}
-
-.summary-unknown {
-    color: var(--color-fail);
-    font-weight: bold;
-}
-
-/* Quiz Mode Styles */
-.quiz-question {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 2rem;
-    background-color: var(--color-surface);
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
-}
-
+/* Quiz Mode */
 .quiz-options {
     display: grid;
-    gap: 1rem;
+    gap: 0.75rem;
     margin-bottom: 1.5rem;
+    width: 100%;
+    max-width: 600px;
 }
 
 .quiz-option-btn {
-    width: 100%;
-    background-color: #f3f4f6;
+    background-color: var(--color-surface);
     color: var(--color-text-dark);
-    padding: 15px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--color-border);
+    padding: 16px;
     text-align: left;
-    transition: background-color 0.2s, border-color 0.2s;
+    border-radius: 8px;
+    font-weight: 500;
 }
 
-.quiz-option-btn:not([disabled]):hover {
-    background-color: #e5e7eb;
-    border-color: var(--color-primary);
-}
-
-.quiz-option-btn.correct {
-    background-color: var(--color-success);
-    color: white;
-    border-color: var(--color-success);
-}
-
-.quiz-option-btn.incorrect {
-    background-color: var(--color-fail);
-    color: white;
-    border-color: var(--color-fail);
-}
-
-#next-quiz-btn {
-    width: 100%;
-    margin-top: 1rem;
-}
-
-/* --- Mobile Responsiveness --- */
+/* Mobile Adjustments */
 @media (max-width: 600px) {
-    header h1 {
-        font-size: 1.5rem;
-    }
     .container {
-        margin: 1rem auto;
+        margin-top: 1rem;
+        padding: 0 1rem;
     }
-    .deck-card {
-        padding: 1rem;
-    }
-    .deck-card .card-actions {
+    .study-actions, .mode-selector {
         flex-direction: column;
-    }
-    .study-actions {
-        flex-direction: column;
-        width: 100%;
-    }
-    .study-actions button {
         max-width: none;
+        gap: 0.75rem;
+    }
+    .flashcard-scene {
+        height: 280px;
     }
     .flashcard-front p, .flashcard-back p {
-        font-size: 1.2rem;
-    }
-    .quiz-question {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
 }

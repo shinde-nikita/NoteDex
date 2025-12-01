@@ -21,15 +21,14 @@
 
     <script src="js/app.js"></script>
     <script>
-        // Load decks when the page loads
         document.addEventListener('DOMContentLoaded', () => {
             NoteDex.displayDecks();
 
             document.getElementById('create-deck-btn').addEventListener('click', () => {
+                // Use a custom, modern modal/prompt if expanding UI, but sticking to prompt() for simplicity
                 const deckName = prompt("Enter the name for the new deck:");
                 if (deckName) {
                     const newDeckId = NoteDex.createDeck(deckName);
-                    // Redirect to the edit page for the new deck
                     window.location.href = `create.html?deckId=${newDeckId}`; 
                 }
             });
