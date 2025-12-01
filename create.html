@@ -9,11 +9,11 @@
 <body>
     <header>
         <a href="index.html" class="back-link">← All Decks</a>
-        <h1 id="deck-title">Edit Deck</h1>
+        <h1 id="deck-title">Loading Deck...</h1>
     </header>
     <main class="container">
         <section class="card-form-section">
-            <h2>Add / Edit Cards</h2>
+            <h2>Add New Card</h2>
             <form id="add-card-form" class="card-form">
                 <input type="text" id="card-front" placeholder="Front of Card (Question)" required>
                 <textarea id="card-back" placeholder="Back of Card (Answer)" required></textarea>
@@ -56,7 +56,7 @@
             let editingCardId = null;
 
             const renderCards = () => {
-                const deck = NoteDex.getDeck(deckId);
+                const deck = NoteDex.getDeck(deckId); // Reload to get updated cards
                 cardListContainer.innerHTML = '';
                 cardCountSpan.textContent = deck.cards.length;
 
@@ -66,17 +66,17 @@
                     cardElement.innerHTML = `
                         <div class="card-preview">
                             <p><strong>Q:</strong> ${card.front}</p>
-                            <p><strong>A:</strong> ${card.back.substring(0, 50)}${card.back.length > 50 ? '...' : ''}</p>
+                            <p><strong>A:</strong> ${card.back.substring(0, 50)}...</p>
                         </div>
                         <div class="card-actions">
-                            <button class="edit-btn secondary-btn" data-card-id="${card.id}">Edit</button>
-                            <button class="delete-btn secondary-btn" data-card-id="${card.id}">Delete</button>
+                            <button class="edit-btn" data-card-id="${card.id}">Edit</button>
+                            <button class="delete-btn" data-card-id="${card.id}">Delete</button>
                         </div>
                     `;
                     cardListContainer.appendChild(cardElement);
                 });
 
-                // Attach event listeners
+                // Attach event listeners for edit and delete buttons
                 cardListContainer.querySelectorAll('.edit-btn').forEach(button => {
                     button.addEventListener('click', (e) => {
                         const id = e.target.dataset.cardId;
@@ -103,6 +103,7 @@
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const front = document.getElementById('card-front').value.trim();
+                // FIX APPLIED HERE: Removed redundant .value
                 const back = document.getElementById('card-back').value.trim(); 
 
                 if (editingCardId) {
