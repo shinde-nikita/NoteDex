@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteDex - Edit Deck</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-link">← All Decks</a>
+        <h1 id="deck-title">Loading Deck...</h1>
+    </header>
+    <main class="container">
+        <section class="card-form-section">
+            <h2>Add New Card</h2>
+            <form id="add-card-form" class="card-form">
+                <input type="text" id="card-front" placeholder="Front of Card (Question)" required>
+                <textarea id="card-back" placeholder="Back of Card (Answer)" required></textarea>
+                <button type="submit" class="primary-btn">Save Card</button>
+            </form>
+        </section>
+
+        <section class="card-list-section">
+            <h2>Cards in Deck (<span id="card-count">0</span>)</h2>
+            <div id="card-list">
+                </div>
+        </section>
+        
+        <a id="study-link" href="#" class="primary-btn study-btn">Start Studying This Deck →</a>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const deckId = params.get('deckId');
+            
+            if (!deckId) {
+                document.getElementById('deck-title').textContent = "Error: Deck not found.";
+                return;
+            }
+
+            const deck = NoteDex.getDeck(deckId);
+            if (!deck) {
+                 document.getElementById('deck-title').textContent = "Error: Deck not found.";
+                 return;
+            }
+            
+            document.getElementById('deck-title').textContent = deck.name;
+            document.getElementById('study-link').href = `study.html?deckId=${deckId}`;
+            
+            const form = document.getElementById('add-card-form');
+            const cardListContainer = document.getElementById('card-list');
+            const cardCountSpan = document.getElementById('card-count');
+            let editingCardId = null;
+
+            const renderCards = () => {
+                const deck = NoteDex.getDeck(deckId); // Reload to get updated cards
+                cardListContainer.innerHTML = '';
+                cardCountSpan.textContent = deck.cards.length;
+
+                deck.cards.forEach(card => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'card-item';
+                    cardElement.innerHTML = `
+                        <div class="card-preview">
+                            <p><strong>Q:</strong> ${card.front}</p>
+                            <p><strong>A:</strong> ${card.back.substring(0, 50)}...</p>
+                        </div>
+                        <div class="card-actions">
+                            <button class="edit-btn" data-card-id="${card.id}">Edit</button>
+                            <button class="delete-btn" data-card-id="${card.id}">Delete</button>
+                        </div>
+                    `;
+                    cardListContainer.appendChild(cardElement);
+                });
+
+                // Attach event listeners for edit and delete buttons
+                cardListContainer.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const id = e.target.dataset.cardId;
+                        const card = deck.cards.find(c => c.id === id);
+                        if (card) {
+                            document.getElementById('card-front').value = card.front;
+                            document.getElementById('card-back').value = card.back;
+                            document.querySelector('.card-form button').textContent = 'Update Card';
+                            editingCardId = id;
+                        }
+                    });
+                });
+
+                cardListContainer.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        if (confirm('Are you sure you want to delete this card?')) {
+                            NoteDex.deleteCard(deckId, e.target.dataset.cardId);
+                            renderCards();
+                        }
+                    });
+                });
+            };
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const front = document.getElementById('card-front').value.trim();
+                // FIX APPLIED HERE: Removed redundant .value
+                const back = document.getElementById('card-back').value.trim(); 
+
+                if (editingCardId) {
+                    NoteDex.updateCard(deckId, editingCardId, front, back);
+                    editingCardId = null;
+                    document.querySelector('.card-form button').textContent = 'Save Card';
+                } else {
+                    NoteDex.addCard(deckId, front, back);
+                }
+                
+                form.reset();
+                renderCards();
+            });
+
+            renderCards();
+        });
+    </script>
+</body>
+</html>

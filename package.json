@@ -1,0 +1,19 @@
+{
+  "name": "notedex",
+  "version": "1.0.0",
+  "description": "A personal, study-focused flashcard web app.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "flashcards",
+    "study",
+    "localstorage"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
